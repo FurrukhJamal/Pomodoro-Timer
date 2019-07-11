@@ -5,45 +5,51 @@ export default class App extends React.Component {
   constructor(){
     super()
     this.state = {
-      seconds : 59,
-      minutes : 1,
+      seconds : 0,
+      minutes : 2,
     }
   }
 
   componentDidMount () {
-
+    //console.log(this.state.seconds,this.state.minutes,)
     this.interval = setInterval(this.decrease, 1000)
 
 
   }
 
-  componentWillUnmount () {
+  componentWillUnmount(){
     clearInterval(this.interval)
-
   }
 
   decrease =  () => {
+    console.log("interval running")
     this.setState(previousstate => {
-          if(previousstate.seconds === 0)
+          //let seconds = parseInt(previousstate.seconds)
+          if(previousstate.seconds === 0 && previousstate.minutes !== 0)
           {
             return {
               seconds : 59,
-              minutes : previousstate.minutes - 1,
+              minutes : previousstate.minutes - 1
             }
           }
 
-          if(previousstate.seconds === 0 && previousstate.minutes === 0 )
+          if(this.state.seconds === 0 && this.state.minutes === 0 )
           {
             console.log("inside")
-            return{
+            /*return{
               seconds: 0,
               minutes :0,
-            }
-
-
+            }*/
+            clearInterval(this.interval)
+          }
+          if(previousstate.seconds > 0)
+          {
+            return {
+              seconds: previousstate.seconds - 1,
+              minutes: previousstate.minutes
+                    }
           }
 
-              return {seconds: previousstate.seconds - 1}
 
 
 
