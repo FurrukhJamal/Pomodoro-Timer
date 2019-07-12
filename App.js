@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default class App extends React.Component {
   constructor(){
@@ -7,12 +7,13 @@ export default class App extends React.Component {
     this.state = {
       seconds : 23,
       minutes : 2,
+      start : false,
     }
   }
 
   componentDidMount () {
     //console.log(this.state.seconds,this.state.minutes,)
-    this.interval = setInterval(this.decrease, 1000)
+    //this.interval = setInterval(this.decrease, 1000)
 
 
   }
@@ -65,13 +66,60 @@ export default class App extends React.Component {
     return value
   }
 
+  startstop = () => {
+    if(!this.state.start)
+    {
+        this.interval = setInterval(this.decrease, 1000)
+    }
+    else
+    {
+      clearInterval(this.interval)
+    }
+    console.log(this.state.start)
+    this.setState( previousstate =>({
+      start: !previousstate.start
+    }))
+  }
+
 
  render(){
-   return (
-     <View style={styles.container}>
-       <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
-     </View>
-   );
+   if(!this.state.start)
+   {
+     return (
+       <View style={styles.container}>
+         <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
+         <View style={styles.controls}>
+         <View style={styles.buttons}>
+           <Button  title = "Start" onPress = {this.startstop}/>
+         </View>
+         <View style={styles.buttons}>
+           <Button title = "Reset" />
+         </View>
+         </View>
+
+
+      </View>
+     );
+   }
+   else
+   {
+     return (
+       <View style={styles.container}>
+         <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
+         <View style={styles.controls}>
+          <View style={styles.buttons}>
+            <Button  title = "Pause" onPress = {this.startstop}/>
+          </View>
+          <View style={styles.buttons}>
+            <Button title = "Reset" />
+          </View>
+        </View>
+
+      </View>
+     );
+   }
+
+
  }
 
 }
@@ -82,5 +130,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+
   },
+
+  controls : {
+    flexDirection : "row",
+    backgroundColor : "red",
+    width : 200,
+    alignItems: 'center',
+    justifyContent : "space-evenly",
+  },
+
+  buttons : {
+
+    width : 85,
+    margin : 10,
+
+  }
 });
