@@ -5,7 +5,7 @@ export default class App extends React.Component {
   constructor(){
     super()
     this.state = {
-      seconds : 0,
+      seconds : 23,
       minutes : 2,
     }
   }
@@ -44,25 +44,32 @@ export default class App extends React.Component {
           }
           if(previousstate.seconds > 0)
           {
+
             return {
-              seconds: previousstate.seconds - 1,
-              minutes: previousstate.minutes
-                    }
-          }
-
-
-
-
+                seconds: previousstate.seconds - 1,
+                minutes: previousstate.minutes
+                      }
+        }
 
       }
 
     )
   }
 
+  addzero(value){
+    value = String(value)
+    if(value.length < 2)
+    {
+      value = "0" + value
+    }
+    return value
+  }
+
+
  render(){
    return (
      <View style={styles.container}>
-       <Text style = {{fontSize: 60}}>{this.state.minutes}:{this.state.seconds}</Text>
+       <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
      </View>
    );
  }
