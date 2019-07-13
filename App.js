@@ -5,8 +5,14 @@ export default class App extends React.Component {
   constructor(){
     super()
     this.state = {
-      seconds : 23,
-      minutes : 2,
+      startseconds: 0,
+      startminutes : 2,
+      get seconds(){
+        return this.startseconds
+      },
+      get minutes() {
+        return this.startminutes
+      },
       start : false,
     }
   }
@@ -81,6 +87,15 @@ export default class App extends React.Component {
     }))
   }
 
+  reset = () => {
+    clearInterval(this.interval)
+    this.setState({
+      seconds : this.state.startseconds,
+      minutes: this.state.startminutes,
+      start: false,
+    })
+  }
+
 
  render(){
    if(!this.state.start)
@@ -93,7 +108,7 @@ export default class App extends React.Component {
            <Button  title = "Start" onPress = {this.startstop}/>
          </View>
          <View style={styles.buttons}>
-           <Button title = "Reset" />
+           <Button title = "Reset" onPress = {this.reset} />
          </View>
          </View>
 
@@ -111,7 +126,7 @@ export default class App extends React.Component {
             <Button  title = "Pause" onPress = {this.startstop}/>
           </View>
           <View style={styles.buttons}>
-            <Button title = "Reset" />
+            <Button title = "Reset" onPress = {this.reset} />
           </View>
         </View>
 
@@ -135,7 +150,7 @@ const styles = StyleSheet.create({
 
   controls : {
     flexDirection : "row",
-    backgroundColor : "red",
+    
     width : 200,
     alignItems: 'center',
     justifyContent : "space-evenly",
