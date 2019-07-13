@@ -7,13 +7,19 @@ export default class App extends React.Component {
     this.state = {
       startseconds: 0,
       startminutes : 2,
+      //to be able to reset
       get seconds(){
         return this.startseconds
       },
+      //to be able to reset
       get minutes() {
         return this.startminutes
       },
       start : false,
+
+      //To display if its a work or break timer
+      work : true,
+      heading : "WORK TIMER",
     }
   }
 
@@ -48,6 +54,31 @@ export default class App extends React.Component {
               minutes :0,
             }*/
             clearInterval(this.interval)
+            /*FOR LOOPING PURPOSE*/
+            if(previousstate.work)
+            {
+              this.interval = setInterval(this.decrease, 1000)
+
+              return {
+                work : false,
+                heading : "BREAK TIMER",
+                seconds : previousstate.startseconds,
+                minutes : previousstate.startminutes,
+                start : true,
+              }
+            }
+            else
+            {
+              this.interval = setInterval(this.decrease, 1000)
+
+              return {
+                work : true,
+                heading : "WORK TIMER",
+                seconds : previousstate.startseconds,
+                minutes : previousstate.startminutes,
+                start : true,
+              }
+            }
           }
           if(previousstate.seconds > 0)
           {
@@ -102,6 +133,7 @@ export default class App extends React.Component {
    {
      return (
        <View style={styles.container}>
+         <Heading heading = {this.state.heading}/>
          <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
          <View style={styles.controls}>
          <View style={styles.buttons}>
@@ -120,6 +152,7 @@ export default class App extends React.Component {
    {
      return (
        <View style={styles.container}>
+         <Heading heading = {this.state.heading}/>
          <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
          <View style={styles.controls}>
           <View style={styles.buttons}>
@@ -150,7 +183,7 @@ const styles = StyleSheet.create({
 
   controls : {
     flexDirection : "row",
-    
+
     width : 200,
     alignItems: 'center',
     justifyContent : "space-evenly",
@@ -161,5 +194,17 @@ const styles = StyleSheet.create({
     width : 85,
     margin : 10,
 
+  },
+  heading : {
+    fontSize : 70,
+    color : "blue",
+    
   }
 });
+
+
+const Heading = props => (
+  <View style = {{marginBottom: 40}}>
+    <Text  style ={styles.heading}>{props.heading}</Text>
+  </View>
+)
