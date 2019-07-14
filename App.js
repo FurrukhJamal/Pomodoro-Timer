@@ -1,172 +1,52 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import Timer, {Heading} from "./pomodorotimer";
+
 
 export default class App extends React.Component {
   constructor(){
     super()
-    this.state = {
-      startseconds: 0,
-      startminutes : 2,
-      //to be able to reset
-      get seconds(){
-        return this.startseconds
-      },
-      //to be able to reset
-      get minutes() {
-        return this.startminutes
-      },
-      start : false,
-
-      //To display if its a work or break timer
-      work : true,
-      heading : "WORK TIMER",
+    this.state ={
+      timer : 2
     }
   }
-
-  componentDidMount () {
-    //console.log(this.state.seconds,this.state.minutes,)
-    //this.interval = setInterval(this.decrease, 1000)
-
-
-  }
-
-  componentWillUnmount(){
-    clearInterval(this.interval)
-  }
-
-  decrease =  () => {
-    console.log("interval running")
-    this.setState(previousstate => {
-          //let seconds = parseInt(previousstate.seconds)
-          if(previousstate.seconds === 0 && previousstate.minutes !== 0)
-          {
-            return {
-              seconds : 59,
-              minutes : previousstate.minutes - 1
-            }
-          }
-
-          if(this.state.seconds === 0 && this.state.minutes === 0 )
-          {
-            console.log("inside")
-            /*return{
-              seconds: 0,
-              minutes :0,
-            }*/
-            clearInterval(this.interval)
-            /*FOR LOOPING PURPOSE*/
-            if(previousstate.work)
-            {
-              this.interval = setInterval(this.decrease, 1000)
-
-              return {
-                work : false,
-                heading : "BREAK TIMER",
-                seconds : previousstate.startseconds,
-                minutes : previousstate.startminutes,
-                start : true,
-              }
-            }
-            else
-            {
-              this.interval = setInterval(this.decrease, 1000)
-
-              return {
-                work : true,
-                heading : "WORK TIMER",
-                seconds : previousstate.startseconds,
-                minutes : previousstate.startminutes,
-                start : true,
-              }
-            }
-          }
-          if(previousstate.seconds > 0)
-          {
-
-            return {
-                seconds: previousstate.seconds - 1,
-                minutes: previousstate.minutes
-                      }
-        }
-
-      }
-
-    )
-  }
-
-  addzero(value){
-    value = String(value)
-    if(value.length < 2)
-    {
-      value = "0" + value
-    }
-    return value
-  }
-
-  startstop = () => {
-    if(!this.state.start)
-    {
-        this.interval = setInterval(this.decrease, 1000)
-    }
-    else
-    {
-      clearInterval(this.interval)
-    }
-    console.log(this.state.start)
-    this.setState( previousstate =>({
-      start: !previousstate.start
-    }))
-  }
-
-  reset = () => {
-    clearInterval(this.interval)
+  timer2 = ()=>{
+    console.log("inside 2")
     this.setState({
-      seconds : this.state.startseconds,
-      minutes: this.state.startminutes,
-      start: false,
+      timer : 2,
     })
   }
 
+  timer5 = ()=> {
+    console.log("inside 5")
+    this.setState({
+      timer : 5,
+    })
+  }
 
  render(){
-   if(!this.state.start)
-   {
-     return (
-       <View style={styles.container}>
-         <Heading heading = {this.state.heading}/>
-         <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
-         <View style={styles.controls}>
-         <View style={styles.buttons}>
-           <Button  title = "Start" onPress = {this.startstop}/>
-         </View>
-         <View style={styles.buttons}>
-           <Button title = "Reset" onPress = {this.reset} />
-         </View>
-         </View>
-
-
-      </View>
-     );
-   }
-   else
-   {
-     return (
-       <View style={styles.container}>
-         <Heading heading = {this.state.heading}/>
-         <Text style = {{fontSize: 60}}>{this.addzero(this.state.minutes)}:{this.addzero(this.state.seconds)}</Text>
-         <View style={styles.controls}>
-          <View style={styles.buttons}>
-            <Button  title = "Pause" onPress = {this.startstop}/>
+   return(
+     <View style = {styles.container}>
+     <View style = {styles.options}>
+       <Text style = {{fontSize : 20}}>Options</Text>
+       <View style = {styles.button}>
+          <View style= {{margin : 10}}>
+            <Button  title = "2 mins" onPress = {this.timer2}/>
           </View>
-          <View style={styles.buttons}>
-            <Button title = "Reset" onPress = {this.reset} />
+          <View  style= {{margin : 10}}>
+            <Button title = "5 mins" onPress = {this.timer5}/>
           </View>
-        </View>
+       </View>
 
-      </View>
-     );
-   }
 
+     </View>
+        <Timer time= {this.state.timer} />
+
+
+     </View>
+
+
+   )
 
  }
 
@@ -180,31 +60,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
   },
+  options : {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor : "red",
+    justifyContent: 'center',
 
-  controls : {
+  },
+  button : {
     flexDirection : "row",
 
-    width : 200,
-    alignItems: 'center',
-    justifyContent : "space-evenly",
-  },
-
-  buttons : {
-
-    width : 85,
-    margin : 10,
-
-  },
-  heading : {
-    fontSize : 70,
-    color : "blue",
-    
   }
+
 });
-
-
-const Heading = props => (
-  <View style = {{marginBottom: 40}}>
-    <Text  style ={styles.heading}>{props.heading}</Text>
-  </View>
-)
